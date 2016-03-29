@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+# Copyright(c) 2016-2018 Mike 'Fuzzy' Partin
+# See LICENSE.md for license details.
+
+# Rationale:
+# I got tired of using virtualenv, rvm, govm, *vm, and all the others. It just
+# seemed stupid to me, to have all these tools that did the exact same thing,
+# just for different langauges. Things like portage exist and would work, but
+# support way more features than is really needed. MVM should function as a
+# replacement for all of the *vm type tools, managing multiple versions of
+# any number of arbitrary software packages. It may even be suitable for use
+# as a lightweight package manager for small systems at some point. Who knows?!
+
+# Stdlib imports
+import os
+import sys
+import json
+
+#### UGLY HACK ####
+sys.path.insert(0, '/home/fuzzy/dev/mvm')
+
+# Internal imports
+from mvm.args   import *
+from mvm.term   import *
+from mvm.config import *
+
+# Main logic
+
+def main():
+    config = read_config()
+    debug(config)
+    debug(config.arguments)
+
+if __name__ == '__main__':
+    main()
