@@ -21,16 +21,12 @@ import json
 sys.path.insert(0, '/home/fuzzy/dev/mvm')
 
 # Internal imports
-from mvm.args   import *
 from mvm.term   import *
-from mvm.config import *
+from mvm.app    import *
 
 # Main logic
-
 def main():
-    config = read_config()
-    debug(config)
-    debug(config.arguments)
+    app = Mvm(sys.argv)
 
 if __name__ == '__main__':
     main()
