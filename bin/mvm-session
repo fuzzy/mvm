@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+import os
+import time
+import hashlib
+
+if os.getenv('MVM_SESSION_ID') == "":
+    print(hashlib.sha224(b'%s:%s:%s' % (os.getenv('USER').encode('utf-8'),
+                                        os.getenv('HOME').encode('utf-8'),
+                                        time.ctime().encode('utf-8'))).hexdigest())
+else:
+    print(os.getenv('MVM_SESSION_ID'))
