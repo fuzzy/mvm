@@ -37,5 +37,5 @@ def error(txt):
     print('%s: %s' % (red('ERROR'), txt))
 
 def fatal(txt):
-    cons_error(txt)
+    error(txt)
 

@@ -1,10 +1,40 @@
 {
-    "help": {"help": "Show this help screen.", "handler": "None"
-    "list": {"help": "List installed or available packages.",
-             "handler": "list_pkgs",
-             "opts": [["-a", "Show available packages.",
-                       ["available", false]],
-                      ["-i", "Show installed packaged. (default)",
-                       ["installed", true]]]},
-    "enable": {"help": "Enable a given package.", "handler": "None"}
+    "help": {
+        "help": "Show this help screen.",
+        "handler": "showHelp"
+    },
+    "version": {
+        "help": "Show the version.",
+        "handler": "showVersion"
+    },
+    "list": {
+        "help": "List installed or available packages.",
+        "handler": "ListPackages",
+        "options": [
+            ["-a", "Show available packages.",           ["installed", false]]
+        ]
+    },
+    "enable": {
+        "help": "Enable a given package.",
+        "handler": "EnablePackage",
+        "options": [
+            ["-g", "Enable in the global profile.", ["session", false]]
+        ]
+    },
+    "disable": {
+        "help": "Disable usage of a given package.",
+        "handler": "DisablePackage",
+        "options": [
+            ["-g", "Disable in the global profile.", ["session", false]]
+        ]
+    },
+    "install": {
+        "help": "Install a given package.",
+        "handler": "InstallPackage",
+        "options": [
+            ["-f", "Force installation (possibly overwriting files)",        ["force",   true]],
+            ["-c", "Clean any previous installation out before installing.", ["clean",   true]],
+            ["-v", "Show compiler messages.",                                ["verbose", true]]
+        ]
+    }
 }
