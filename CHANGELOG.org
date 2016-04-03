@@ -9,7 +9,8 @@ opinion.
 CLOSED: [2016-04-02 Sat 22:50]
 ** DONE Get proper bash login/logout integration support working
 CLOSED: [2016-04-03 Sun 14:47]
-** TODO complain about arguments no one knows about
+** DONE complain about arguments no one knows about
+CLOSED: [2016-04-03 Sun 15:15]
 ** TODO get progress output for downloads
 ** TODO proper setup.py support and prep for module publishing
 ** TODO audit the code for proper author, license, etc metadata
