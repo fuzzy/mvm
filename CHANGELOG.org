@@ -1,10 +1,19 @@
 ***** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool
 CLOSED: [2016-04-02 Sat 22:50]
+
 ***** TODO proper setup.py support and prep for module publishing
+
 ***** TODO move version to 0.2.0, and branch
+
 ***** TODO add options source path keyword to PackageSpec
+
 ***** TODO add optional keyword patches to PackageSpec with obvious backing support
+
 ***** TODO move version to 0.3.0 and branch
+
 ***** TODO add makepkg command to build a binpkg from an installed one
+
 ***** TODO add binpkg support to the install command
+
 ***** TODO move version to 0.4.0 and branch
+
