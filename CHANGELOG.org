@@ -7,20 +7,24 @@ opinion.
 * 0.1.0
 ** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool 
 CLOSED: [2016-04-02 Sat 22:50]
+** TODO Get proper bash login/logout integration support working
 ** TODO complain about arguments no one knows about
 ** TODO get progress output for downloads
 ** TODO proper setup.py support and prep for module publishing
 
 * 0.2.0
 ** TODO Get proper sorting in installed packages
-** TODO add optional source path keyword to PackageSpec
+** DONE add optional source path keyword to PackageSpec
+CLOSED: [2016-04-03 Sun 14:03] 
+By changing the way the pkg/ver are seperated in the install command the need for the keyword
+** TODO Get Sh/Zsh/Ksh login/logout support working properly
 ** TODO add optional keyword patches to PackageSpec with obvious backing support
 
 * 0.3.0
 ** TODO add makepkg command to build a binpkg from an installed one
 ** TODO add binpkg support to the install command
 ** TODO update the output functions to use a data driven approach
-
+** TODO Get wierd shell support in for login/logout if possible (csh/fish)
 
 * 0.4.0
 ** TODO Plan out 0.4.0 changes
