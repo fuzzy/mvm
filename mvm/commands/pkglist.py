@@ -14,11 +14,9 @@ class MvmCmdList(object):
         self.instPkgs = []
         if installed:
             if output:
-                print('%s%s %s%s%s\n' % (cyan('I'),
-                                       white('nstalled'),
-                                       cyan('P'),
-                                       white('ackages'),
-                                       cyan(':')))
+                print('%s %s%s\n' % (OutputWord('installed'),
+                                     OutputWord('packages'),
+                                     cyan(':')))
             pkgs = os.listdir(self.config.dirs['instroot'])
             pkgs.sort()
             longest = 0
@@ -26,6 +24,7 @@ class MvmCmdList(object):
                 if len(pkg) > longest:
                     longest = len(pkg)
             longest  = longest+3
+            pkgs.sort()
             for pkg in pkgs:
                 oput = '%s%s%s(' % (cyan(pkg[0].upper()),
                                     white(pkg[1:]),
@@ -38,8 +37,9 @@ class MvmCmdList(object):
                     versions = os.listdir(pkgPath)
                     versions.sort()
                     for vers in versions:
-                        self.instPkgs.append(Package(self.config, pkgPath+'/'+vers))
-                        oput += self.instPkgs[-1:][0].Display()
+                        tobj = Package(self.config, pkgPath+'/'+vers)
+                        oput += tobj.Display()
+                        self.instPkgs.append(tobj)
                         if pkg != pkgs[-1:][0]: oput += ', '
                 if output:
                     if oput[-2:] == ', ':
@@ -50,11 +50,9 @@ class MvmCmdList(object):
                 print('\n %s = Session, %s = Global' % (cyan('*'), green('*')))
         else:
             if output:
-                print('%s%s %s%s%s\n' % (cyan('A'),
-                                       white('vailable'),
-                                       cyan('P'),
-                                       white('ackages'),
-                                       cyan(':')))
+                print('%s %s%s\n' % (OutputWord('available'),
+                                     OutputWord('packages'),
+                                     cyan(':')))
             pkgs = os.listdir(self.config.dirs.pkgspecs)
             pkgs.sort()
             longest = 0

@@ -39,3 +39,5 @@ def error(txt):
 def fatal(txt):
     error(txt)
 
+def OutputWord(word):
+    return('%s%s' % (cyan(word[0].upper()), white(word[1:].lower())))
