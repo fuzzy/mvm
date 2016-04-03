@@ -1,5 +1,5 @@
 ***** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool
-CLOSED: [2016-04-02 Sat 22:50]
+****** CLOSED: [2016-04-02 Sat 22:50]
 
 ***** TODO proper setup.py support and prep for module publishing
 
