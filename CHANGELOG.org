@@ -13,6 +13,7 @@ CLOSED: [2016-04-02 Sat 22:50]
 ** TODO proper setup.py support and prep for module publishing
 
 * 0.2.0
+** TODO publish module to PyPI
 ** TODO Get proper sorting in installed packages
 ** DONE add optional source path keyword to PackageSpec
 CLOSED: [2016-04-03 Sun 14:03] 
