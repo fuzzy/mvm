@@ -35,11 +35,17 @@ class MvmCmdList(object):
                                            self.sysInfo['os']['name'].lower(),
                                            self.sysInfo['os']['arch'])
                 if os.path.isdir(pkgPath):
-                    for vers in os.listdir(pkgPath):
+                    versions = os.listdir(pkgPath)
+                    versions.sort()
+                    for vers in versions:
                         self.instPkgs.append(Package(self.config, pkgPath+'/'+vers))
                         oput += self.instPkgs[-1:][0].Display()
                         if pkg != pkgs[-1:][0]: oput += ', '
-                if output: print(oput+')')
+                if output:
+                    if oput[-2:] == ', ':
+                        print(oput[:-2]+')')
+                    else:
+                        print(oput+')')
             if output:
                 print('\n %s = Session, %s = Global' % (cyan('*'), green('*')))
         else:
