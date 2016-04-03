@@ -1,0 +1,20 @@
+* About MVM
+MVM (Myriad Version Manager) is a package meant to do the core job of packages like virtualenv, rvm, multipy and others.
+Namely managing multiple versions of a package. The drawback that I felt existed with other projects in this space is that
+they focus on managing multiple versions of a single package. MVM concerns it'self with being generic enough to handle
+multiple versions of any package.
+
+* Installing MVM
+** TODO setup.py and pypi packaging support
+** TODO Finish this documentation
+
+* Using MVM
+** Showing the help output
+'''mvm'''
+or
+'''mvm help'''
+
+* Work To Do:
+** TODO Add optional attribute to pkgspec denoting source dir if it's non standard
+** TODO Add optional patches keyword, the value of which should be a list of URI's to fetch the patches you want applied to the source tree before it is built
+** TODO Add makepkg command to build a distributable package of an installed one
