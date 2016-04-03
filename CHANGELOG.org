@@ -2,7 +2,8 @@
 
 Note that this is done in ORG format. If you would like to see all the rendered pretty bits,
 open it up in Emacs. Which with spacemacs is a pretty slick little setup. In my, at times, humble
-opinion. 
+opinion. The format is pretty simple, and I'm not using any special features. More information
+about syntax can be found here: [[http://orgmode.org/worg/dev/org-syntax.html]Org mode syntax].
 
 * 0.1.0
 ** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool 
