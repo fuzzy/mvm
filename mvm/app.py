@@ -107,9 +107,16 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
                 # Now let's care about our suboptions
                 for arg in args:
                     if arg[0] == '-':
+                        valid = False
                         for opt in self.config.arguments[command].options:
                             if opt[0] == arg:
-                                handlerStr += '%s=%r,' % (opt[2][0], opt[2][1])
+                                valid = True
+                        if valid:
+                            for opt in self.config.arguments[command].options:
+                                if opt[0] == arg:
+                                    handlerStr += '%s=%r,' % (opt[2][0], opt[2][1])
+                        else:
+                            warn('%s is not a valid option. Ignored.' % arg)
                     else:
                         endItem  = arg
                 if endItem != '':
