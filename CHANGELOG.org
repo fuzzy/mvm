@@ -7,7 +7,7 @@ opinion.
 * 0.1.0
 ** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool 
 CLOSED: [2016-04-02 Sat 22:50]
-** TODO update the output functions to use a data driven approach
+** TODO complain about arguments no one knows about
 ** TODO get progress output for downloads
 ** TODO proper setup.py support and prep for module publishing
 
@@ -19,6 +19,8 @@ CLOSED: [2016-04-02 Sat 22:50]
 * 0.3.0
 ** TODO add makepkg command to build a binpkg from an installed one
 ** TODO add binpkg support to the install command
+** TODO update the output functions to use a data driven approach
+
 
 * 0.4.0
 ** TODO Plan out 0.4.0 changes
