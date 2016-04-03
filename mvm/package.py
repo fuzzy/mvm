@@ -1,6 +1,7 @@
 # Stdlib imports
 import os
 import re
+import sys
 import json
 
 # Internal imports
@@ -133,11 +134,9 @@ class Package(object):
                 return False
 
     def Display(self):
-        if not self.IsGlobal():   g = ' '
-        else:                     g = green('G')
-        if not self.IsSession():  s = ' '
-        else:                     s = cyan('S')
-        print('[%1s%1s] %s-%s' % (g,
-                                  s,
-                                  self.Name,
-                                  self.Version))
+        if self.IsGlobal():
+            return green(self.Version)
+        elif self.IsSession():
+            return cyan(self.Version)
+        else:
+            return white(self.Version)
