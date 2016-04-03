@@ -5,8 +5,8 @@ they focus on managing multiple versions of a single package. MVM concerns it'se
 multiple versions of any package.
 
 * Installing MVM
-** TODO setup.py and pypi packaging support
-** TODO Finish this documentation
+**** TODO setup.py and pypi packaging support
+**** TODO Finish this documentation
 
 * Using MVM
 ** Showing the help output
