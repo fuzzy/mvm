@@ -6,16 +6,29 @@ MVM is a version manager. That was simple right? What does it do? Well, if you a
 * TODO
 
 # Using MVM
+
 * TODO
+
 ## Showing help and version information
+
 * TODO
+
 ## Listing installed packages
+
 * TODO
+
 ## Listing available packages
+
 * TODO
+
 ## Installing packages
+
 * TODO
+
 ## Enabling packages
+
 * TODO
+
 ## Disabling packages
+
 * TODO
