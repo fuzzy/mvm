@@ -39,23 +39,34 @@ class Package(object):
             for i in f:
                 sfile  = '%s/%s' % (r, i)
                 dfile  = '%s%s/%s' % (dst, r.replace(src, ''), i)
-                os.symlink(sfile, dfile)
+                try: os.symlink(sfile, dfile)
+                except OSError: pass
             for i in d:
                 tdir   = '%s%s/%s' % (dst, r.replace(src, ''), i)
                 if not os.path.isdir(tdir):
                     os.mkdir(tdir)
 
     def _unlink(self, session=True):
-        files = []
-        for r,d,f in os.walk(self.Path):
-            for i in f: files.append('%s/%s' % (r.split(self.Version)[1], i))
+        src            = self.Path
         if session:
-            sdir = self._sessiond
+            dst        = self._sessiond
         else:
-            sdir = self._config.dirs.globalroot
-        for f in files:
-            if os.path.isfile('%s%s' % (sdir, f)):
-                os.unlink('%s%s' % (sdir, f))
+            dst        = self._config.dirs.globalroot
+        sdobj = {}
+        dirs  = []
+        for r,d,f in os.walk(src):
+            for i in f:
+                sfile = '%s%s/%s' % (dst, r.replace(src, ''), i)
+                if os.path.islink(sfile):
+                    if os.readlink(sfile) == r+'/'+i:
+                        os.unlink(sfile)
+            for i in d:
+                dirs.append(r.replace(self.Path, '')+'/'+i)
+        dirs.sort(key=len)
+        dirs.reverse()
+        for d in dirs:
+            if len(os.listdir('%s%s' % (dst, '/'.join(d.split('/'))))) == 0:
+                os.rmdir('%s%s' % (dst, '/'.join(d.split('/'))))
 
     def Enable(self, session=True):
         if session:
