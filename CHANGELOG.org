@@ -14,6 +14,7 @@ CLOSED: [2016-04-03 Sun 14:47]
 CLOSED: [2016-04-03 Sun 15:15]
 ** DONE get progress output for downloads
 CLOSED: [2016-04-04 Mon 01:20]
+** TODO Add a FindPackage method to Mvm() class
 ** TODO add remove command to uninstall packages
 
 * 0.2.0
