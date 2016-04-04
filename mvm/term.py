@@ -1,3 +1,5 @@
+import datetime
+
 def red(txt):
     return '\033[1;31m%s\033[0m' % txt
 
@@ -40,4 +42,32 @@ def fatal(txt):
     error(txt)
 
 def OutputWord(word):
-    return('%s%s' % (cyan(word[0].upper()), white(word[1:].lower())))
+    ('%s%s' % (cyan(word[0].upper()), white(word[1:].lower())))
+
+def humanTime(amount):
+    secs  = float(datetime.timedelta(seconds=amount).total_seconds())
+    units = [("d", 86400), ("h", 3600), ("m", 60), ("s", 1)]
+    parts = []
+    for unit, mul in units:
+        if secs / mul >= 1 or mul == 1:
+            if mul > 1:
+                n = int(math.floor(secs / mul))
+                secs -= n * mul
+            else:
+                n = secs if secs != int(secs) else int(secs)
+            parts.append("%s%s" % (n, unit)) #, "" if n == 1 else "s"))
+    return "".join(parts)
+
+# This function turns a size (given in bytes) into
+# a human readable string
+
+def humanSize(size):
+    if size <= 1024:
+        return '%dB' % size
+    else:
+        smap = {1: 'KB', 2: 'MB', 3: 'GB', 4: 'TB', 5: 'PB'}
+        mod  = 1
+        while mod <= len(smap.keys()):
+            if size >= (1024 ** mod) and size < (1024 ** (mod+1)):
+                return '%.02f%s' % ((float(size) / float(1024.00 ** float(mod))), smap[mod])
+            mod += 1
