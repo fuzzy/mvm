@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import json
+import time
 import subprocess
 import multiprocessing
 
@@ -98,10 +99,29 @@ class PackageSpec(object):
         return data
 
     def _fetch(self, uri):
-        output = '%s/.mvm/packages/distfiles/%s' % (os.getenv('HOME'),
+        output    = '%s/.mvm/packages/distfiles/%s' % (os.getenv('HOME'),
                                                     os.path.basename(uri))
         debug('Fetching: '+uri)
-        open(output, 'wb+').write(urlopen(uri).read())
+        inFP      = urlopen(uri)
+        outFP     = open(output, 'wb+') # .write(urlopen(uri).read())
+        buffsize  = 40960
+        buff      = inFP.read(buffsize)
+        outsz     = 0
+        st        = time.time()
+        while buff:
+            outFP.write(buff)
+            outFP.flush()
+            buff  = inFP.read(buffsize)
+            outsz += len(buff)
+            tlen  = int(time.time() - st)
+            if tlen == 0: tlen = 1
+            sys.stdout.write('%s %s in %s @ %s/sec%s\r' % (green('>>'),
+                                                           humanSize(outsz),
+                                                           humanTime(tlen),
+                                                           humanSize(outsz / tlen),
+                                                           ' '*10))
+            sys.stdout.flush()
+        print('')
 
     def _extract(self, fname):
         distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
