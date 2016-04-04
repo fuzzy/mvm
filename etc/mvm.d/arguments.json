@@ -36,5 +36,9 @@
             ["-c", "Clean any previous installation out before installing.", ["clean",   true]],
             ["-v", "Show compiler messages.",                                ["verbose", true]]
         ]
+    },
+    "remove": {
+        "help": "Remove a given package.",
+        "handler": "RemovePackage"
     }
 }
