@@ -12,46 +12,53 @@ CLOSED: [2016-04-02 Sat 22:50]
 CLOSED: [2016-04-03 Sun 14:47]
 ** DONE complain about arguments no one knows about
 CLOSED: [2016-04-03 Sun 15:15]
+** DONE get progress output for downloads
+CLOSED: [2016-04-04 Mon 01:20]
 ** TODO add remove command to uninstall packages
-** TODO get progress output for downloads
+
+* 0.2.0
 ** TODO proper setup.py support and prep for module publishing with proper shell integration
 ** TODO audit the code for proper author, license, etc metadata
 ** TODO get at least workable documentation
 ** TODO add remove command to uninstall packages
 
-** TODO make 0.2.0 branch, cut tarball sans .git directory
-
-* 0.2.0
+* 0.3.0
 ** TODO publish module to PyPI
 ** TODO Get proper sorting in installed packages
 ** TODO make case issues when referencing packages a moot issue
 ** DONE add optional source path keyword to PackageSpec
 CLOSED: [2016-04-03 Sun 14:03] 
 By changing the way the pkg/ver are seperated in the install command the need for the keyword
+
+* 0.4.0
 ** TODO show command to show given package's metadata
 ** TODO add optional keyword patches to PackageSpec with obvious backing support with support for relative paths or URI's
 ** TODO allow global profile access only if no MVM_SESSION_ID
+** TODO fix version display bug for listing installed packages when only 1 package (with multiple versions) is installed
 
-* 0.3.0
-
+* 0.5.0
 ** TODO write pkg metadata to %basedir%/packages/db/%package%/%version%.json
 ** TODO remove the metadata files on package removal
 ** TODO add makepkg command to build a binpkg from an installed one
 ** TODO add binpkg support to the install command
+
+* 0.6.0
 ** TODO update the output functions to use a data driven approach
 ** TODO Get wierd shell support in for login/logout if possible (csh/fish)
 ** TODO GPG binpkg signing support
 ** TODO dependancy tracking and resolution
 ** TODO finalize binpackage formats including metadata location
 
-* 0.4.0
+* 0.7.0
 ** TODO whoowns, query, search type features
 ** TODO remote binpkg support (ft|htt)p(s) should suffice
 ** TODO packenv comand for metabuilds
+** TODO support fetching and query of remote package metadata via (ft|htt)p(s)
+
+* 0.8.0
 ** TODO add -s / system flag to install so that it would require root privs, and go to a systemwide root
 ** TODO add -r flag to specify alternate install root (install|remove|enable|disable|list)
 ** TODO support publishing package to remote location via (ft|htt)p(s)
-** TODO support fetching and query of remote package metadata via (ft|htt)p(s)
 ** TODO Get Sh/Zsh/Ksh login/logout support working properly
 
 * FUTURE
