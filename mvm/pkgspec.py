@@ -101,7 +101,7 @@ class PackageSpec(object):
     def _fetch(self, uri):
         output    = '%s/.mvm/packages/distfiles/%s' % (os.getenv('HOME'),
                                                     os.path.basename(uri))
-        debug('Fetching: '+uri)
+        print('%s %s' % (green('>>'), uri))
         inFP      = urlopen(uri)
         outFP     = open(output, 'wb+') # .write(urlopen(uri).read())
         buffsize  = 40960
@@ -126,7 +126,7 @@ class PackageSpec(object):
     def _extract(self, fname):
         distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
         tempdir   = '%s/.mvm/packages/temp'      % os.getenv('HOME')
-        debug('Extracting: '+fname)
+        print('%s %s' % (green('>>'), fname))
         os.system('bsdtar xpf %s/%s -C %s' % (distfiles, fname, tempdir))
 
     def _cmd(self, dname, data):
@@ -153,7 +153,7 @@ class PackageSpec(object):
 
     def _configure(self):
         if self.data['configure']['enable']:
-            debug("configuring.")
+            print("%s Configuring." % green('>>'))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])
@@ -161,7 +161,7 @@ class PackageSpec(object):
 
     def _compile(self):
         if self.data['compile']['enable']:
-            debug('compiling.')
+            print('%s Compiling.' % green('>>'))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])
@@ -169,7 +169,7 @@ class PackageSpec(object):
 
     def _install(self):
         if self.data['install']['enable']:
-            debug('installing.')
+            print('%s Installing.' % green('>>'))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])

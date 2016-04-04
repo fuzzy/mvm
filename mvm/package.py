@@ -36,6 +36,12 @@ class Package(object):
             dst        = self._sessiond
         else:
             dst        = self._config.dirs.globalroot
+        # Output
+        if session:
+            print('%s Linking %s into session dir.' % (cyan('>>'), self.Name))
+        else:
+            print('%s Linking %s into global dir.' % (green('>>'), self.Name))
+        # Work
         for r,d,f in os.walk(src):
             for i in f:
                 sfile  = '%s/%s' % (r, i)
@@ -55,6 +61,12 @@ class Package(object):
             dst        = self._config.dirs.globalroot
         sdobj = {}
         dirs  = []
+        # Output
+        if session:
+            print('%s Unlinking %s from the session dir.' % (cyan('>>'), self.Name))
+        else:
+            print('%s Unlinking %s from the global dir.' % (green('>>'), self.Name))
+        # Work
         for r,d,f in os.walk(src):
             for i in f:
                 sfile = '%s%s/%s' % (dst, r.replace(src, ''), i)
