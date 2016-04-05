@@ -14,8 +14,8 @@ from mvm.commands        import *
 class Mvm(MvmConfig, MvmSession, MvmCommands):
 
     _majorVer = 0
-    _minorVer = 1
-    _patchLvl = 3
+    _minorVer = 2
+    _patchLvl = 0
 
     sysInfo   = Edict({
         'os': {
