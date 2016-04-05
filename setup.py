@@ -32,4 +32,6 @@ setup(name='mvm',
                    "Intended Audience :: System Administrators",
                    "Intended Audience :: Developers",
                    "Intended Audience :: Ender Users/Desktop",
-                   "Operating System :: POSIX",])
+                   "Operating System :: POSIX",],
+      scripts=['bin/mvm', 'bin/mvm-session'],
+      data_files=[('/etc', ['etc/mvm.cfg'])])
