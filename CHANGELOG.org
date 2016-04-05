@@ -16,19 +16,20 @@ CLOSED: [2016-04-03 Sun 15:15]
 CLOSED: [2016-04-04 Mon 01:20]
 
 * 0.2.0
-** TODO proper setup.py support and prep for module publishing with proper shell integration
+** DONE proper setup.py support and prep for module publishing with proper shell integration
+CLOSED: [2016-04-05 Tue 05:51]
 ** TODO audit the code for proper author, license, etc metadata
 ** TODO get at least workable documentation
 ** DONE add remove command to uninstall packages
 CLOSED: [2016-04-04 Mon 23:43]
 
 * 0.3.0
-** TODO publish module to PyPI
-** TODO Get proper sorting in installed packages
-** TODO make case issues when referencing packages a moot issue
-** DONE add optional source path keyword to PackageSpec
+** DONE add optional source path keyword to PackageSpec [#A]
 CLOSED: [2016-04-03 Sun 14:03] 
 By changing the way the pkg/ver are seperated in the install command the need for the keyword
+** TODO make case issues when referencing packages a moot issue [#B]
+** TODO Get proper sorting in installed packages [#C]
+** TODO publish module to PyPI [#Z] :publish:
 
 * 0.4.0
 ** TODO show command to show given package's metadata
