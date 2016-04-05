@@ -17,7 +17,7 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
     _minorVer = 1
     _patchLvl = 3
 
-    sysInfo   = {
+    sysInfo   = Edict({
         'os': {
             'name': os.uname()[0],
             'vers': os.uname()[2],
@@ -28,7 +28,7 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
         'username': os.getenv('USER'),
         'homedir':  os.getenv('HOME'),
         'path':     os.getenv('PATH')
-    }
+    })
 
     SessionID = os.getenv('MVM_SESSION_ID')
 
