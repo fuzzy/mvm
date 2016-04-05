@@ -17,9 +17,6 @@ import os
 import sys
 import json
 
-#### UGLY HACK ####
-sys.path.insert(0, '/home/fuzzy/dev/mvm')
-
 # Internal imports
 from mvm.term   import *
 from mvm.app    import *
