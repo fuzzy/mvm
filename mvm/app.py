@@ -15,7 +15,7 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
 
     _majorVer = 0
     _minorVer = 2
-    _patchLvl = 0
+    _patchLvl = 1
 
     sysInfo   = Edict({
         'os': {
