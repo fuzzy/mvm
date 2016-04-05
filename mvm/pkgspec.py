@@ -132,7 +132,7 @@ class PackageSpec(object):
     def _extract(self, fname):
         distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
         tempdir   = '%s/.mvm/packages/temp'      % os.getenv('HOME')
-        print('%s%s %s' % (cyan('>'), white('>'), fname))
+        print('%s%s Extracting %s' % (cyan('>'), white('>'), fname))
         os.system('bsdtar xpf %s/%s -C %s' % (distfiles, fname, tempdir))
 
     def _cmd(self, dname, data):
