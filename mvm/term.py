@@ -1,3 +1,9 @@
+# Author: Mike 'Fuzzy' Partin
+# Copyright: (c) 2016-2018
+# Email: fuzzy@fumanchu.org
+# License: See LICENSE.md for details
+
+# Stdlib imports
 import datetime
 
 def red(txt):

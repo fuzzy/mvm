@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+# Author: Mike 'Fuzzy' Partin
+# Copyright: (c) 2016-2018
+# Email: fuzzy@fumanchu.org
+# License: See LICENSE.md for details
+
+# Stdlib imports
 import os
 import time
 import hashlib
@@ -7,8 +13,8 @@ import hashlib
 if not os.getenv('MVM_SESSION_ID'):
     sessionID = hashlib.sha224()
     sessionID.update(b'%s:%s:%s' % (os.getenv('USER').encode('utf-8'),
-                                              os.getenv('HOME').encode('utf-8'),
-                                              time.ctime().encode('utf-8')))
+                                    os.getenv('HOME').encode('utf-8'),
+                                    time.ctime().encode('utf-8')))
     print(sessionID.hexdigest())
 else:
     print(os.getenv('MVM_SESSION_ID'))
