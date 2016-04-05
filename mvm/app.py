@@ -40,6 +40,14 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
             sys.exit(1)
         self._handlers = {}
         self._readConfig()
+        # Let's ensure our directory structure is there
+        for d in self.config.dirs.keys():
+            os.system('mkdir -p %s' % self.config.dirs[d])
+        # And that our profiles are properly formed if they are currently absent
+        for f in ('global', 'session'):
+            if not os.path.isfile('%s/%s.json' % (self.config.dirs.profiles, f)):
+                open('%s/%s.json' % (self.config.dirs.profiles, f), 'w+').write('{}')
+        # Now back to what we were doing
         self._startSession()
         self._argParse(args)
 
