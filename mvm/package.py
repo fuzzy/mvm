@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import json
+import shutil
 
 # Internal imports
 from mvm.term import *
@@ -144,6 +145,13 @@ class Package(object):
                 return True
             else:
                 return False
+
+    def Delete(self):
+        # If there is more than 1 version, delete just me
+        if len(os.listdir(self.Path+'/../')) > 1:
+            shutil.rmtree(self.Path)
+        else:
+            shutil.rmtree(self._config.dirs.instroot+'/'+self.Name)
 
     def Display(self):
         if self.IsGlobal():
