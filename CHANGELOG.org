@@ -18,6 +18,8 @@ CLOSED: [2016-04-04 Mon 01:20]
 * 0.2.0
 ** DONE proper setup.py support and prep for module publishing with proper shell integration
 CLOSED: [2016-04-05 Tue 05:51]
+*** DONE fix installation issues (with init checks)
+CLOSED: [2016-04-05 Tue 16:19]
 ** TODO audit the code for proper author, license, etc metadata
 ** TODO get at least workable documentation
 ** DONE add remove command to uninstall packages
