@@ -101,7 +101,7 @@ class PackageSpec(object):
     def _fetch(self, uri):
         output    = '%s/.mvm/packages/distfiles/%s' % (os.getenv('HOME'),
                                                     os.path.basename(uri))
-        print('%s %s' % (green('>>'), uri))
+        print('%s%s %s' % (cyan('>'), white('>'), uri))
         inFP      = urlopen(uri)
         outFP     = open(output, 'wb+') # .write(urlopen(uri).read())
         buffsize  = 40960
@@ -115,18 +115,19 @@ class PackageSpec(object):
             outsz += len(buff)
             tlen  = int(time.time() - st)
             if tlen == 0: tlen = 1
-            sys.stdout.write('%s %s in %s @ %s/sec%s\r' % (green('>>'),
-                                                           humanSize(outsz),
-                                                           humanTime(tlen),
-                                                           humanSize(outsz / tlen),
-                                                           ' '*10))
+            sys.stdout.write('%s%s %s in %s @ %s/sec%s\r' % (cyan('>'),
+                                                             white('>'),
+                                                             humanSize(outsz),
+                                                             humanTime(tlen),
+                                                             humanSize(outsz / tlen),
+                                                             ' '*10))
             sys.stdout.flush()
         print('')
 
     def _extract(self, fname):
         distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
         tempdir   = '%s/.mvm/packages/temp'      % os.getenv('HOME')
-        print('%s %s' % (green('>>'), fname))
+        print('%s%s %s' % (cyan('>'), white('>'), fname))
         os.system('bsdtar xpf %s/%s -C %s' % (distfiles, fname, tempdir))
 
     def _cmd(self, dname, data):
@@ -153,7 +154,7 @@ class PackageSpec(object):
 
     def _configure(self):
         if self.data['configure']['enable']:
-            print("%s Configuring." % green('>>'))
+            print("%s%s Configuring." % (cyan('>'), white('>')))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])
@@ -161,7 +162,7 @@ class PackageSpec(object):
 
     def _compile(self):
         if self.data['compile']['enable']:
-            print('%s Compiling.' % green('>>'))
+            print('%s%s Compiling.' % (cyan('>'), white('>')))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])
@@ -169,7 +170,7 @@ class PackageSpec(object):
 
     def _install(self):
         if self.data['install']['enable']:
-            print('%s Installing.' % green('>>'))
+            print('%s%s Installing.' % (cyan('>'), white('>')))
             dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
                                                      self.data['package'],
                                                      self.data['version'])
