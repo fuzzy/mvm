@@ -106,15 +106,30 @@ Tk       (8.6.5)
 ## Installing packages
 
 * TODO
+```
+$ mvm install python-3.5.1
+>> https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+>> 14.10MB in 33s @ 437.66KB/sec
+>> Extracting Python-3.5.1.tar.xz
+>> Configuring.
+>> Compiling.
+>> Installing.
+```
 
 ## Enabling packages
 
-* TODO
+```
+$ mvm enable lua-2.3.0
+```
 
 ## Disabling packages
 
-* TODO
+```
+$ mvm disable lua-2.3.0
+```
 
 ## Uninstalling packages
 
-* TODO
+```
+$ mvm remove python-3.5.1
+```
