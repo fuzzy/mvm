@@ -55,3 +55,8 @@ print('%s %s' % (prompt, yellow('And the following to ~/.bash_logout')))
 print('%s %s\n' % (prompt, yellow('(or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])')))
 
 print(white(read('./shells/mvm-%s-logout.sh' % os.path.basename(shell))))
+
+print('%s %s' % (prompt, yellow("If you haven't already done so, now is the time to")))
+print('%s %s' % (prompt, yellow("rm -rf ~/.mvm/packages/pkgspecs")))
+print('%s %s' % (prompt, yellow("git clone http://github.com/fuzzy/mvmspecs.git ~/.mvm/packages/pkgspecs")))
+
