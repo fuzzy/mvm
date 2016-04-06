@@ -6,18 +6,21 @@ MVM is a version manager. That was simple right? What does it do? Well, if you a
 The 2 methods officially supported for installation are:
 * From the git repository.
 
+>
 > git clone https://github.com/fuzzy/mvm.git
 > cd mvm ; sudo ./setup.py install
+>
 
 * Using pip via PyPI
 
+>
 > pip install mvm
+>
 
 At this point some instructions are printed out, nice and bold, colorful, hard to miss. But just in case one did (hey, these things happen), I'll repeat them below:
 
-> At this point, if you have installed manually
-> from the git repo, you will want to
-> add the following to your ~/${SHELL}rc:
+At this point, if you have installed manually from the git repo, you will want to add the following to your ~/${SHELL}rc:
+
 >
 > export MVM_SESSION_ID=$(mvm-session)
 > export MVM_GLOBAL_DIR=${HOME}/.mvm/sessions/global
@@ -28,15 +31,19 @@ At this point some instructions are printed out, nice and bold, colorful, hard t
 >
 > export PATH=${MVM_GLOBAL_DIR}/bin:${MVM_GLOBAL_DIR}/sbin:${MVM_SESSION_DIR}/bin:${MVM_SESSION_DIR}/sbin:${PATH}
 >
-> And the following to ~/.bash_logout
-> (or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])
+
+And the following to ~/.bash_logout, or ~/.logout for csh, ksh, sh, or ~/.zlogout for zsh
+
 >
-> #
-> # ~/.bash_logout
-> #
 > test ! -z "${MVM_SESSION_DIR}" && test -d ${MVM_SESSION_DIR} && rm -rf ${MVM_SESSION_DIR}
 >
 
+If you haven't already done so, now is the time to
+
+>
+> rm -rf ~/.mvm/packages/pkgspecs
+> git clone http://github.com/fuzzy/mvmspecs.git ~/.mvm/packages/pkgspecs
+>
 
 # Using MVM
 
