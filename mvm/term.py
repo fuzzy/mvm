@@ -4,6 +4,7 @@
 # License: See LICENSE.md for details
 
 # Stdlib imports
+import math
 import datetime
 
 def red(txt):
@@ -48,7 +49,7 @@ def fatal(txt):
     error(txt)
 
 def OutputWord(word):
-    ('%s%s' % (cyan(word[0].upper()), white(word[1:].lower())))
+    return '%s%s' % (cyan(word[0].upper()), white(word[1:].lower()))
 
 def humanTime(amount):
     secs  = float(datetime.timedelta(seconds=amount).total_seconds())

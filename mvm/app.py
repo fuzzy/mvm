@@ -20,7 +20,7 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
 
     _majorVer = 0
     _minorVer = 2
-    _patchLvl = 1
+    _patchLvl = 4
 
     sysInfo   = Edict({
         'os': {
@@ -91,7 +91,7 @@ class Mvm(MvmConfig, MvmSession, MvmCommands):
                                           white('install'),
                                           yellow('-c'),
                                           yellow('-v'),
-                                          purple('python-2.7.11.json')))
+                                          purple('python-2.7.11')))
         sys.exit(1)
 
     def _argParse(self, args):
