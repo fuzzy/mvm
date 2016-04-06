@@ -47,19 +47,61 @@ If you haven't already done so, now is the time to
 
 # Using MVM
 
-* TODO
+#### Showing help and version information
 
-## Showing help and version information
+>
+> $ mvm help # or mvm with no arguments
+> Usage: mvm command <opt> <...> <PACKAGESPEC>
+>
+> disable   	Disable usage of a given package.
+>        -g	Disable in the global profile.
+> enable    	Enable a given package.
+>        -g	Enable in the global profile.
+> help      	Show this help screen.
+> install   	Install a given package.
+>        -f	Force installation (possibly overwriting files)
+>        -c	Clean any previous installation out before installing.
+>        -v	Show compiler messages.
+> list      	List installed or available packages.
+>        -a	Show available packages.
+> remove    	Remove a given package.
+> version   	Show the version.
+>
+> Example: mvm install -c -v python-2.7.11
+> $ mvm version
+> mvm (Myriad Version Manager) v0.2.1
+>
 
-* TODO
+#### Listing installed packages
 
-## Listing installed packages
+>
+> $ mvm list
+> Installed Packages:
+>
+> Python   (3.5.1)
+> Bash     (4.34.3.30)
+>
+> * = Session, * = Global
+>
 
-* TODO
+I would like to note, that those asterisks are color coded in the terminal output. To quote the prophet, "I'm mad, I'm not ill".
 
-## Listing available packages
+#### Listing available packages
 
-* TODO
+>
+> $ mvm list -a
+> Available Packages:
+>
+> Bash     (2.05b, 4.3.30, 4.3, 4.4-beta)
+> Lua      (5.0.3, 5.1.5, 5.2.4, 5.3.2)
+> Nim      (latest)
+> Perl     (5.12.5, 5.14.4, 5.16.3, 5.18.4, 5.20.3, 5.22.1)
+> Python   (2.5.6, 2.6.9, 2.7.11, 3.1.5, 3.2.6, 3.3.6, 3.4.4, 3.5.1)
+> Ruby     (1.9.3-p551, 2.0.0-p648, 2.1.10, 2.2.4, 2.3.0)
+> Slang    (2.3.0)
+> Tcl      (8.6.5)
+> Tk       (8.6.5)
+>
 
 ## Installing packages
 
@@ -70,5 +112,9 @@ If you haven't already done so, now is the time to
 * TODO
 
 ## Disabling packages
+
+* TODO
+
+## Uninstalling packages
 
 * TODO
