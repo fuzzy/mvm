@@ -22,7 +22,8 @@ CLOSED: [2016-04-05 Tue 05:51]
 CLOSED: [2016-04-05 Tue 16:19]
 ** DONE audit the code for proper author, license, etc metadata
 CLOSED: [2016-04-05 Tue 16:38]
-** TODO get at least workable documentation
+** DONE get at least workable documentation
+CLOSED: [2016-04-05 Tue 18:58]
 ** DONE add remove command to uninstall packages
 CLOSED: [2016-04-04 Mon 23:43]
 
