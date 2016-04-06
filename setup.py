@@ -6,6 +6,10 @@ import sys
 from setuptools import setup
 
 # Internal imports
+from mvm.term import *
+
+def append(fr, to):
+    to.write(open(fr).read())
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -17,7 +21,7 @@ setup(name='mvm',
       description='MVM is a tool for managing multiple versions of....anything. Think rvm+virtualenv+luaenv+goenv+allTheOtherEnvs and then go even further. Manage multiple versions of vim, or hexdump, wget if you want too.',
       license='BSD',
       keywords='setuptools deployment installation distutils',
-      url='',
+      url='https://github.com/fuzzy/mvm',
       long_description=read('README.md'),
       classifiers=["Development Status :: 2 - Pre-Alpha",
                    "Topic :: Utilities",
@@ -35,3 +39,19 @@ setup(name='mvm',
       scripts=['bin/mvm', 'bin/mvm-session'],
       data_files=[('/etc', ['etc/mvm.cfg']),
                   ('/etc/mvm.d', ['etc/mvm.d/arguments.json'])])
+
+if sys.stdout.isatty():
+    shell = os.getenv('SHELL')
+else:
+    shell = 'bash'
+prompt    = '%s%s' % (cyan('>'), white('>'))
+print('\n%s %s' % (prompt, yellow('At this point, if you have installed manually')))
+print('%s %s' % (prompt, yellow('from the git repo, you will want to')))
+print('%s %s' % (prompt, yellow('add the following to your ~/%src:\n' % os.path.basename(shell))))
+
+print(white(read('./shells/mvm-%s-login.sh' % os.path.basename(shell))))
+
+print('%s %s' % (prompt, yellow('And the following to ~/.bash_logout')))
+print('%s %s\n' % (prompt, yellow('(or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])')))
+
+print(white(read('./shells/mvm-%s-logout.sh' % os.path.basename(shell))))
