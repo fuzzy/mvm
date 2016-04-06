@@ -88,20 +88,18 @@ I would like to note, that those asterisks are color coded in the terminal outpu
 
 #### Listing available packages
 
->
-> $ mvm list -a
-> Available Packages:
->
-> Bash     (2.05b, 4.3.30, 4.3, 4.4-beta)
-> Lua      (5.0.3, 5.1.5, 5.2.4, 5.3.2)
-> Nim      (latest)
-> Perl     (5.12.5, 5.14.4, 5.16.3, 5.18.4, 5.20.3, 5.22.1)
-> Python   (2.5.6, 2.6.9, 2.7.11, 3.1.5, 3.2.6, 3.3.6, 3.4.4, 3.5.1)
-> Ruby     (1.9.3-p551, 2.0.0-p648, 2.1.10, 2.2.4, 2.3.0)
-> Slang    (2.3.0)
-> Tcl      (8.6.5)
-> Tk       (8.6.5)
->
+`$ mvm list -a
+Available Packages:
+
+Bash     (2.05b, 4.3.30, 4.3, 4.4-beta)
+Lua      (5.0.3, 5.1.5, 5.2.4, 5.3.2)
+Nim      (latest)
+Perl     (5.12.5, 5.14.4, 5.16.3, 5.18.4, 5.20.3, 5.22.1)
+Python   (2.5.6, 2.6.9, 2.7.11, 3.1.5, 3.2.6, 3.3.6, 3.4.4, 3.5.1)
+Ruby     (1.9.3-p551, 2.0.0-p648, 2.1.10, 2.2.4, 2.3.0)
+Slang    (2.3.0)
+Tcl      (8.6.5)
+Tk       (8.6.5)`
 
 ## Installing packages
 
