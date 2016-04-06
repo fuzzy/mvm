@@ -3,7 +3,40 @@ MVM is a version manager. That was simple right? What does it do? Well, if you a
 
 # Installing MVM
 
-* TODO
+The 2 methods officially supported for installation are:
+* From the git repository.
+
+> git clone https://github.com/fuzzy/mvm.git
+> cd mvm ; sudo ./setup.py install
+
+* Using pip via PyPI
+
+> pip install mvm
+
+At this point some instructions are printed out, nice and bold, colorful, hard to miss. But just in case one did (hey, these things happen), I'll repeat them below:
+
+> At this point, if you have installed manually
+> from the git repo, you will want to
+> add the following to your ~/${SHELL}rc:
+>
+> export MVM_SESSION_ID=$(mvm-session)
+> export MVM_GLOBAL_DIR=${HOME}/.mvm/sessions/global
+> export MVM_SESSION_DIR=${HOME}/.mvm/sessions/local/${MVM_SESSION_ID}
+>
+> test ! -d ${MVM_GLOBAL_DIR} && mkdir -p ${MVM_GLOBAL_DIR}
+> test ! -d ${MVM_SESSION_DIR} && mkdir -p ${MVM_SESSION_DIR}
+>
+> export PATH=${MVM_GLOBAL_DIR}/bin:${MVM_GLOBAL_DIR}/sbin:${MVM_SESSION_DIR}/bin:${MVM_SESSION_DIR}/sbin:${PATH}
+>
+> And the following to ~/.bash_logout
+> (or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])
+>
+> #
+> # ~/.bash_logout
+> #
+> test ! -z "${MVM_SESSION_DIR}" && test -d ${MVM_SESSION_DIR} && rm -rf ${MVM_SESSION_DIR}
+>
+
 
 # Using MVM
 
