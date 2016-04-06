@@ -19,7 +19,7 @@ The 2 methods officially supported for installation are:
 
 At this point some instructions are printed out, nice and bold, colorful, hard to miss. But just in case one did (hey, these things happen), I'll repeat them below:
 
-At this point, if you have installed manually from the git repo, you will want to add the following to your ~/${SHELL}rc:
+You will want to add the following to your ~/${SHELL}rc:
 
 >
 > export MVM_SESSION_ID=$(mvm-session)
