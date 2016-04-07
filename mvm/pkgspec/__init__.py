@@ -8,9 +8,10 @@ import os
 import multiprocessing
 
 # Internal imports
-from mvm.pkgspec.fetch import *
+from mvm.pkgspec.fetch   import *
+from mvm.pkgspec.extract import *
 
-class PkgSpec(PkgSpecFetch):
+class PkgSpec(PkgSpecFetch, PkgSpecXtract):
 
     osname  = os.uname()[0]
     arch    = os.uname()[-1:][0]
@@ -22,4 +23,4 @@ class PkgSpec(PkgSpecFetch):
             raise(ValueError, 'Absent package spec.')
         self.pspecFP = open(pkgspec)
         self.dirs    = dirs
-        
+
