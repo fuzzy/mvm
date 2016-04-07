@@ -6,10 +6,8 @@
 # Stdlib imports
 try: # Python2
     from urllib2 import urlopen
-    str_types = (str, unicode)
 except ImportError: # Python3
     from urllib.request import urlopen
-    str_types = (str,)
 
 class PkgSpecFetch(object):
 

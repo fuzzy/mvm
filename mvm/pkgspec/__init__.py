@@ -17,7 +17,9 @@ class PkgSpec(PkgSpecFetch):
     cores   = multiprocessing.cpu_count()
     dirs    = None
 
-    def __init__(self, pkgspec=False):
-        if not pkgspec or not os.path.isfile(pkgspec):
+    def __init__(self, pkgspec=False, dirs=False):
+        if not pkgspec or not dirs or not os.path.isfile(pkgspec):
             raise(ValueError, 'Absent package spec.')
-        pass
+        self.pspecFP = open(pkgspec)
+        self.dirs    = dirs
+        

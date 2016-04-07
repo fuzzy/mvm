@@ -51,6 +51,9 @@ def fatal(txt):
 def OutputWord(word):
     return '%s%s' % (cyan(word[0].upper()), white(word[1:].lower()))
 
+def lineOut(txt):
+    print('%s%s %s' % (cyan('>'), white('>'), txt))
+
 def humanTime(amount):
     secs  = float(datetime.timedelta(seconds=amount).total_seconds())
     units = [("d", 86400), ("h", 3600), ("m", 60), ("s", 1)]
