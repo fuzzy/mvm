@@ -105,7 +105,6 @@ Tk       (8.6.5)
 
 ## Installing packages
 
-* TODO
 ```
 $ mvm install python-3.5.1
 >> https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
