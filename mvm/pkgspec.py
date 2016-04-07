@@ -37,28 +37,33 @@ class PackageSpec(object):
     def __init__(self, pkgSpec=False):
         if not pkgSpec or not os.path.isfile(pkgSpec):
             raise(ValueError, 'Absent package spec.')
-        self.defaults = {'configure': {'cmd':    './configure',
-                                       'args':   ['--prefix=%s%s' % (os.getenv('HOME'),
-                                                                     self.prefix_b),],
-                                       'env':    [],
-                                       "enable": True},
-                         'compile':   {'cmd':    'make',
-                                       'args':   ['-j%d' % self.cores,],
-                                       'env':    [],
-                                       "enable": True},
-                         'install':   {'cmd':    'make',
-                                       'args':   ['install',],
-                                       'env':    [],
-                                       "enable": True},
-                         'osname':    self.osname,
-                         'osnamel':   self.osname.lower(),
-                         'arch':      self.arch}
+        self.defaults       = {'configure': {'cmd':    './configure',
+                                             'args':   ['--prefix=%s%s' % (os.getenv('HOME'),
+                                                                           self.prefix_b),],
+                                             'env':    [],
+                                             "enable": True},
+                               'compile':   {'cmd':    'make',
+                                             'args':   ['-j%d' % self.cores,],
+                                             'env':    [],
+                                             "enable": True},
+                               'install':   {'cmd':    'make',
+                                             'args':   ['install',],
+                                             'env':    [],
+                                             "enable": True},
+                               'osname':    self.osname,
+                               'osnamel':   self.osname.lower(),
+                               'arch':      self.arch}
         try:
-            data = json.loads(open(pkgSpec).read())
+            data            = json.loads(open(pkgSpec).read())
         except Exception:
             fatal('%s is not valid json.' % pkgSpec)
             raise
-        self.data = self._lint(data)
+        data['prefix']      = os.getenv('HOME')+'/'+self.prefix_b
+        self.data           = self._lint(data)
+        self.data           = self._expandMacros(self.data)
+        tdata               = self.data['prefix'].lower()
+        self.data['prefix'] = tdata
+        debug(tdata)
 
     def _lint(self, data=False):
         if not data:
@@ -75,8 +80,7 @@ class PackageSpec(object):
                         data[dflt][attr] = self.defaults[dflt][attr]
             else:
                 data[dflt] = self.defaults[dflt]
-        self.data = data
-        return self._expandMacros(data)
+        return data # self._expandMacros(data)
 
     def _expandMacros(self, data=False):
         if not data:
@@ -151,7 +155,7 @@ class PackageSpec(object):
                                 stderr=subprocess.STDOUT,
                                 close_fds=True)
         logfile = '%s/.mvm/packages/temp/%s-%s.log' % (os.getenv('HOME'),
-                                                       self.data['package'],
+                                                       self.data['package'].lower(),
                                                        self.data['version'])
         open(logfile, 'ab').write(proc.stdout.read())
         #os.system('env %s %s %s' % (' '.join(env), data['cmd'], ' '.join(data['args'])))
