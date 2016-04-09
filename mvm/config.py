@@ -23,9 +23,12 @@ class Edict(dict):
     def __getattr__(self, attr):
         return self.__getitem__(attr)
 
+    def __setattr__(self, attr, value):
+        self.__setitem__(attr, value)
+
     def __setitem__(self, attr, value):
         dict.__setitem__(self, attr, value)
-        self.__setattr__(attr, value)
+        dict.__setattr__(self, attr, value)
 
 class MvmConfig(object):
 
