@@ -20,7 +20,110 @@ except ImportError:
     str_types = (str,)
 
 # Internal imports
-from mvm.term import *
+from mvm.term   import *
+from mvm.config import Edict
+
+class PkgSpec(object):
+    '''
+    The PkgSpec() class deals with compiling and building packages based on a given data template
+    known as a Spec File. This is a standard JSON file, which describes the process of compilation.
+    The format of the file will (at some point) be documented in the project wiki.
+    '''
+
+    ##
+    ## Class attributes
+
+    system             = Edict({'osname': os.uname()[0],
+                               'osvers': os.uname()[2],
+                               'osarch': os.uname()[4],
+                               'cores':  multiprocessing.cpu_count()})
+
+    defaults           = Edict({'packager':  None,  'email':   None,
+                                'homepage':  None,  'package': None,
+                                'version':   None,  'source':  None,
+                                'license':   None,
+                                'configure': {'cmd':  './configure',
+                                               'args': ['--prefix=%%PREFIX%%',],
+                                               'env':  []},
+                                'compile':   {'cmd':  'make',
+                                               'args': ['-j%%CORES%%',],
+                                               'env':  []},
+                                'install':   {'cmd':  'make',
+                                               'args': ['install',],
+                                               'env': []}})
+
+    ##
+    ## Class Methods
+
+    def __init__(self, pSpec=False, config=False):
+        '''
+        Instantiating:
+
+        PkgSpec(pSpec='/path/to/specfile.json', config=ConfigObject)
+
+        or
+
+        PkgSpec(pSpec='specfile.json', config=ConfigObject)
+
+        where the pkgspecs directory will be searched for the given file.
+        '''
+        if False in (pSpec, config):
+            raise(ValueError, 'Must supply a package spec, and a config object.')
+        # First let's record our config object
+        self._cfg      = config
+        # And then validate we have a real file
+        if os.path.isfile(pSpec):
+            self._spec = pSpec
+        elif os.path.isfile(self._cfg.dirs.pkgspecs+'/'+pSpec):
+            self._spec = self._cfg.dirs.pkgspecs+'/'+pSpec
+        # Now let's build our map of defaults
+        self.defaults  = Edict({'configure': {'cmd': './configure',
+                                              'args': ['--prefix=%s/%s/%s/%s/%s' % (self._cfg.dirs.pkgspecs, '', '', '', ''),]},
+                                'compile':   {'cmd': 'make',
+                                              'args': ['-j%%CORES%%' % ]},
+                                'install':   {}})
+
+    def __str__(self):
+        return str('pkgspec')
+
+    def __repr__(self):
+        print str(self.__str__())
+
+    ##
+    ## Private Methods
+
+    def _fetch(self):
+        pass
+
+    def _extract(self):
+        pass
+
+    def _execCmd(self):
+        pass
+
+    def _lint(self):
+        pass
+
+    def _expandMacros(self):
+        pass
+
+    ##
+    ## Public Methods
+
+    def Configure(self):
+        pass
+
+    def Compile(self):
+        pass
+
+    def Install(self):
+        pass
+
+    def Package(self):
+        pass
+
+    def Build(self):
+        pass
 
 class PackageSpec(object):
 
@@ -34,6 +137,7 @@ class PackageSpec(object):
                     'optional': ('patches',),
                     'methods':  ('configure', 'compile', 'install')}
 
+    # Class Methods
     def __init__(self, pkgSpec=False):
         if not pkgSpec or not os.path.isfile(pkgSpec):
             raise(ValueError, 'Absent package spec.')
@@ -65,6 +169,8 @@ class PackageSpec(object):
         self.data['prefix'] = tdata
         debug(tdata)
 
+    ##
+    ## Private methods
     def _lint(self, data=False):
         if not data:
             raise(ValueError, 'No data structure supplied to PackageSpec._lint().')
@@ -184,6 +290,9 @@ class PackageSpec(object):
                                                      self.data['package'],
                                                      self.data['version'])
             self._cmd(dname, self.data['install'])
+
+    ##
+    ## Public Methods
 
     def Build(self, force=False, clean=False, verbose=False):
         self._fetch(self.data['source'])
