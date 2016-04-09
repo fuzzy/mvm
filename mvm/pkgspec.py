@@ -44,13 +44,13 @@ class PackageSpec(object):
                                 'patches':   [],            'depends':   [],
                                 'configure': {'cmd':  './configure',
                                                'args': ['--prefix=%prefix%',],
-                                               'env':  []},
+                                               'env':  [], 'enable': True},
                                 'compile':   {'cmd':  'make',
                                                'args': ['-j%cores%',],
-                                               'env':  []},
+                                               'env':  [], 'enable': True},
                                 'install':   {'cmd':  'make',
                                                'args': ['install',],
-                                               'env': []}})
+                                               'env': [], 'enable': True}})
 
     ##
     ## Class Methods
@@ -70,15 +70,15 @@ class PackageSpec(object):
         if False in (pSpec, config):
             raise(ValueError, 'Must supply a package spec, and a config object.')
         # First let's record our config object
-        self._cfg            = config
+        self._cfg             = config
         # And then validate we have a real file
         if os.path.isfile(pSpec):
-            self._spec       = pSpec
+            self._spec        = pSpec
         elif os.path.isfile(self._cfg.dirs.pkgspecs+'/'+pSpec):
-            self._spec       = self._cfg.dirs.pkgspecs+'/'+pSpec
+            self._spec        = self._cfg.dirs.pkgspecs+'/'+pSpec
         # Let's read in our JSON data
         try:
-            self._data       = Edict(json.loads(open(self._spec).read()))
+            self._data        = Edict(json.loads(open(self._spec).read()))
         except Exception:
             fatal("The file %s contains malformed JSON data." % self._spec)
             sys.exit(1)
@@ -88,8 +88,9 @@ class PackageSpec(object):
                                                     self._defaults.osname,
                                                     self._defaults.osarch,
                                                     self._data.version.lower())
-        self._lint()
-        self.data             = self._macros(self._data.copy())
+        data                  = Edict(self._lint(self._defaults, self._data))
+        self._data            = data.copy()
+        self._data            = Edict(self._macros(self._data.copy()).copy())
         
     def __str__(self):
         return str('pkgspec:%s-%s' % (self._data.package, self._data.version))
@@ -100,15 +101,19 @@ class PackageSpec(object):
     ##
     ## Private Methods
 
-    def _lint(self):
-        for k in self._defaults.keys():
-            if k not in self._data.keys():
-                if self._defaults[k] != None:
-                    self._data[k] = self._defaults[k]
-                else:
-                    fatal("Required keyword %s is missing from %s." % (k, self._spec))
-                    sys.exit(1)
-
+    def _lint(self, a, b):
+        c = b.copy()
+        for k in a.keys():
+            if k not in c.keys():
+                c[k] = a[k]
+            elif isinstance(a[k], (list, tuple)):
+                for i in a[k]:
+                    if i not in c[k]:
+                        c[k].append(i)
+            elif isinstance(a[k], dict):
+                c[k] = self._lint(a[k], c[k])
+        return c
+    
     def _macros(self, data=False):
         if not data:
             raise(ValueError, 'No data structure supplied to PackageSpec._expandMacros()')
@@ -192,69 +197,19 @@ class PackageSpec(object):
     ##
     ## Public Methods
 
-    def Configure(self):
-        print(self._data.configure)
-        sys.exit(0)
-        if self._data.configure.enable:
-            print("%s%s Configuring." % (cyan('>'), white('>')))
-            dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
-                                  self._data.package,
-                                  self._data.version)
-            self._cmd(dname, self._data.configure)
-
-
-    def Compile(self):
-        pass
-
-    def Install(self):
-        pass
-
     def Package(self):
         pass
 
     def Build(self, force=None, clean=None, verbose=None):
         self._fetch(self._data.source)
         self._extract()
-        self.Configure()
-
-class PackageSpecOld(object):
-
-    def _extract(self, fname):
-        distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
-        tempdir   = '%s/.mvm/packages/temp'      % os.getenv('HOME')
-        print('%s%s Extracting %s' % (cyan('>'), white('>'), fname))
-        os.system('bsdtar xpf %s/%s -C %s' % (distfiles, fname, tempdir))
-
-    def _configure(self):
-        if self.data['configure']['enable']:
-            print("%s%s Configuring." % (cyan('>'), white('>')))
-            dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
-                                                     self.data['package'],
-                                                     self.data['version'])
-            self._cmd(dname, self.data['configure'])
-
-    def _compile(self):
-        if self.data['compile']['enable']:
-            print('%s%s Compiling.' % (cyan('>'), white('>')))
-            dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
-                                                     self.data['package'],
-                                                     self.data['version'])
-            self._cmd(dname, self.data['compile'])
-
-    def _install(self):
-        if self.data['install']['enable']:
-            print('%s%s Installing.' % (cyan('>'), white('>')))
-            dname = '%s/.mvm/packages/temp/%s-%s' % (os.getenv('HOME'),
-                                                     self.data['package'],
-                                                     self.data['version'])
-            self._cmd(dname, self.data['install'])
-
-    ##
-    ## Public Methods
-
-    def Build(self, force=False, clean=False, verbose=False):
-        self._fetch(self.data['source'])
-        self._extract(os.path.basename(self.data['source']))
-        self._configure()
-        self._compile()
-        self._install()
+        for method in ((self._data.configure, 'Configuring.'),
+                       (self._data.compile,   'Compiling.'),
+                       (self._data.install,   'Installing.')):
+            if method[0].enable:
+                print("%s%s %s" % (cyan('>'), white('>'), method[1]))
+                dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
+                                      self._data.package,
+                                      self._data.version)
+                self._cmd(dname, method[0])
+        
