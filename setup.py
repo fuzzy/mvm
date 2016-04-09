@@ -40,23 +40,20 @@ setup(name='mvm',
       data_files=[('/etc', ['etc/mvm.cfg']),
                   ('/etc/mvm.d', ['etc/mvm.d/arguments.json'])])
 
-if sys.stdout.isatty():
-    shell = os.getenv('SHELL')
-else:
-    shell = 'bash'
-prompt    = '%s%s' % (cyan('>'), white('>'))
-print('\n%s %s' % (prompt, yellow('At this point, if you have installed manually')))
-print('%s %s' % (prompt, yellow('from the git repo, you will want to')))
-print('%s %s' % (prompt, yellow('add the following to your ~/%src:\n' % os.path.basename(shell))))
-
-print(white(read('./shells/mvm-%s-login.sh' % os.path.basename(shell))))
-
-print('%s %s' % (prompt, yellow('And the following to ~/.bash_logout')))
-print('%s %s\n' % (prompt, yellow('(or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])')))
-
-print(white(read('./shells/mvm-%s-logout.sh' % os.path.basename(shell))))
-
-print('%s %s' % (prompt, yellow("If you haven't already done so, now is the time to")))
-print('%s %s' % (prompt, yellow("rm -rf ~/.mvm/packages/pkgspecs")))
-print('%s %s' % (prompt, yellow("git clone http://github.com/fuzzy/mvmspecs.git ~/.mvm/packages/pkgspecs")))
+if sys.argv[1] == 'install':
+    if sys.stdout.isatty():
+        shell = os.getenv('SHELL')
+    else:
+        shell = 'bash'
+    prompt    = '%s%s' % (cyan('>'), white('>'))
+    print('\n%s %s' % (prompt, yellow('At this point, if you have installed manually')))
+    print('%s %s' % (prompt, yellow('from the git repo, you will want to')))
+    print('%s %s' % (prompt, yellow('add the following to your ~/%src:\n' % os.path.basename(shell))))
+    print(white(read('./shells/mvm-%s-login.sh' % os.path.basename(shell))))
+    print('%s %s' % (prompt, yellow('And the following to ~/.bash_logout')))
+    print('%s %s\n' % (prompt, yellow('(or ~/.logout [csh,ksh,sh], or ~/.zlogout [zsh])')))
+    print(white(read('./shells/mvm-%s-logout.sh' % os.path.basename(shell))))
+    print('%s %s' % (prompt, yellow("If you haven't already done so, now is the time to")))
+    print('%s %s' % (prompt, yellow("rm -rf ~/.mvm/packages/pkgspecs")))
+    print('%s %s' % (prompt, yellow("git clone http://github.com/fuzzy/mvmspecs.git ~/.mvm/packages/pkgspecs")))
 
