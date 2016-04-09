@@ -17,7 +17,8 @@ class MvmCmdInstall(object):
             pkg = arg.split('-')[0]
             ver = '-'.join(arg.split('-')[1:])
             if os.path.isfile('%s/%s/%s.json' % (self.config.dirs.pkgspecs, pkg, ver)):
-                spec = PackageSpec('%s/%s/%s.json' % (self.config.dirs.pkgspecs, pkg, ver))
+                spec = PackageSpec(pSpec='%s/%s/%s.json' % (self.config.dirs.pkgspecs, pkg, ver),
+                                   config=self.config)
                 spec.Build(force=force, clean=clean, verbose=verbose)
         else:
             raise(ValueError, 'Specfile does not exist in %s' % self.config.dirs.pkgspecs)
