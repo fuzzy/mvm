@@ -44,7 +44,8 @@ class MvmConfig(object):
             sys.exit(1)
         cfg                   = Edict(json.loads(open(cfg_file, 'r').read()))
         for d in cfg.dirs:
-            cfg.dirs[d]       = re.sub('~', os.getenv('HOME'), cfg.dirs[d].copy())
+            tcfg              = re.sub('~', os.getenv('HOME'), cfg.dirs[d])
+            cfg.dirs[d]       = tcfg
         if os.path.isdir(cfg.dirs['cfgdata']):
             if os.path.isfile('%s/arguments.json' % cfg.dirs['cfgdata']):
                 tfp           = open('%s/arguments.json' % cfg.dirs['cfgdata'])
