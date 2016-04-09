@@ -23,7 +23,7 @@ except ImportError:
 from mvm.term   import *
 from mvm.config import Edict
 
-class PkgSpec(object):
+class PackageSpec(object):
     '''
     The PkgSpec() class deals with compiling and building packages based on a given data template
     known as a Spec File. This is a standard JSON file, which describes the process of compilation.
@@ -88,14 +88,11 @@ class PkgSpec(object):
                                                     self._defaults.osname,
                                                     self._defaults.osarch,
                                                     self._data.version.lower())
-        print(self._cfg.dirs)
         self._lint()
-        print('self._data: %s' % self._data)
         self.data             = self._macros(self._data.copy())
-        print('self._data: %s' % self._data)
-
+        
     def __str__(self):
-        return str('pkgspec')
+        return str('pkgspec:%s-%s' % (self._data.package, self._data.version))
 
     def __repr__(self):
         print(str(self.__str__()))
@@ -164,7 +161,11 @@ class PkgSpec(object):
         print('')
 
     def _extract(self):
-        pass
+        print('%s%s Extracting %s' % (cyan('>'), white('>'),
+                                      os.path.basename(self._data.source)))
+        os.system('bsdtar xpf %s/%s -C %s' % (self._cfg.dirs.dstfiles,
+                                              os.path.basename(self._data.source),
+                                              self._cfg.dirs.pkgtemp))
 
     def _cmd(self, dname, data):
         cdir = os.getcwd()
@@ -192,7 +193,15 @@ class PkgSpec(object):
     ## Public Methods
 
     def Configure(self):
-        pass
+        print(self._data.configure)
+        sys.exit(0)
+        if self._data.configure.enable:
+            print("%s%s Configuring." % (cyan('>'), white('>')))
+            dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
+                                  self._data.package,
+                                  self._data.version)
+            self._cmd(dname, self._data.configure)
+
 
     def Compile(self):
         pass
@@ -203,10 +212,12 @@ class PkgSpec(object):
     def Package(self):
         pass
 
-    def Build(self):
-        pass
+    def Build(self, force=None, clean=None, verbose=None):
+        self._fetch(self._data.source)
+        self._extract()
+        self.Configure()
 
-class PackageSpec(object):
+class PackageSpecOld(object):
 
     def _extract(self, fname):
         distfiles = '%s/.mvm/packages/distfiles' % os.getenv('HOME')
