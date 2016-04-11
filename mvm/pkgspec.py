@@ -91,7 +91,7 @@ class PackageSpec(object):
         data                  = Edict(self._lint(self._defaults, self._data))
         self._data            = data.copy()
         self._data            = Edict(self._macros(self._data.copy()).copy())
-        
+
     def __str__(self):
         return str('pkgspec:%s-%s' % (self._data.package, self._data.version))
 
@@ -113,7 +113,7 @@ class PackageSpec(object):
             elif isinstance(a[k], dict):
                 c[k] = self._lint(a[k], c[k])
         return c
-    
+
     def _macros(self, data=False):
         if not data:
             raise(ValueError, 'No data structure supplied to PackageSpec._expandMacros()')
@@ -172,6 +172,13 @@ class PackageSpec(object):
                                               os.path.basename(self._data.source),
                                               self._cfg.dirs.pkgtemp))
 
+    def _patch(self, pname=False):
+        if not pname or not os.path.isfile('%s/%s' % (self._cfg.dirs.dstfiles, pname)):
+            raise(ValueError, 'You must supply a valid patch file.')
+        cdir = os.getcwd()
+        os.chdir('%s/%s-%s' % (self._cfg.dirs.pkgtemp, self._data.package, self._data.version))
+        os.system('')
+
     def _cmd(self, dname, data):
         cdir = os.getcwd()
         env  = []
@@ -197,6 +204,9 @@ class PackageSpec(object):
     ##
     ## Public Methods
 
+    def Depends(self):
+        return self._defaults.depends
+
     def Package(self):
         pass
 
@@ -212,4 +222,4 @@ class PackageSpec(object):
                                       self._data.package,
                                       self._data.version)
                 self._cmd(dname, method[0])
-        
+
