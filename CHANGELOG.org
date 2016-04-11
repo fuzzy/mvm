@@ -1,11 +1,15 @@
 * Changelog
 
 Note that this is done in ORG format. If you would like to see all the rendered pretty bits,
-open it up in Emacs. Which with spacemacs is a pretty slick little setup. In my, at times, humble
-opinion. The format is pretty simple, and I'm not using any special features. More information
-about syntax can be found here: [[http://orgmode.org/worg/dev/org-syntax.html]Org mode syntax].
+open it up in Emacs.  The format is pretty simple, and I'm not using any special features. 
+More information about syntax can be found here: 
+[[http://orgmode.org/worg/dev/org-syntax.html]Org mode syntax].
 
-* 0.1.0
+I'm changing the format of this to just represent a planned feature list, with no version
+roadmap. I'll cut a 1.0.0 version when this list is completed.
+
+* DONE Finished pile
+CLOSED: [2016-04-11 Mon 00:09]
 ** DONE Get some documentation in place, and setup a changelog, cuz I'm a bit oldschool 
 CLOSED: [2016-04-02 Sat 22:50]
 ** DONE Get proper bash login/logout integration support working
@@ -14,8 +18,6 @@ CLOSED: [2016-04-03 Sun 14:47]
 CLOSED: [2016-04-03 Sun 15:15]
 ** DONE get progress output for downloads
 CLOSED: [2016-04-04 Mon 01:20]
-
-* 0.2.0
 ** DONE proper setup.py support and prep for module publishing with proper shell integration
 CLOSED: [2016-04-05 Tue 05:51]
 *** DONE fix installation issues (with init checks)
@@ -26,47 +28,52 @@ CLOSED: [2016-04-05 Tue 16:38]
 CLOSED: [2016-04-05 Tue 18:58]
 ** DONE add remove command to uninstall packages
 CLOSED: [2016-04-04 Mon 23:43]
-
-* 0.3.0
-** DONE add optional source path keyword to PackageSpec [#A]
+** DONE add optional source path keyword to PackageSpec
 CLOSED: [2016-04-03 Sun 14:03] 
 By changing the way the pkg/ver are seperated in the install command the need for the keyword
-** TODO make case issues when referencing packages a moot issue [#B]
-** TODO Get proper sorting in installed packages [#C]
-** TODO publish module to PyPI [#Z] :publish:
+** DONE make case issues when referencing packages a moot issue
+CLOSED: [2016-04-10 Sun 22:38]
 
-* 0.4.0
+* TODO PackageSpec
+** TODO allow multiple source URI's
+** TODO MD5/SHA* verification of downloads
+** TODO source_dir keyword to specify a target source directory (use tar options to enforce)
+** TODO depends list and sorted dependancy graph
+** TODO continue incomplete downloads
+** TODO real time logging of executed commands
+** TODO return status checking on executed commands
+** TODO add optional keyword patches to PackageSpec with support for relative paths or URI's
+** TODO write pkg metadata to %basedir%/packages/db/%package%/%version%.json
+** TODO GPG binpkg signing support
+** TODO target package cross-compilation support
+** TODO distcc and ccache support
+
+* TODO Audits
+** TODO proper error handling
+** TODO docstring/pydoc documentation
+** TODO test case coverage
+
+* TODO Publish
+** TODO publish mvm to PyPI                                         :publish:
+** TODO split argument handling out into seperate package           :publish:
+
+* TODO Tech Debt
+** TODO Get proper sorting in installed packages
 ** TODO show command to show given package's metadata
-** TODO add optional keyword patches to PackageSpec with obvious backing support with support for relative paths or URI's
 ** TODO allow global profile access only if no MVM_SESSION_ID
 ** TODO fix version display bug for listing installed packages when only 1 package (with multiple versions) is installed
-
-* 0.5.0
-** TODO write pkg metadata to %basedir%/packages/db/%package%/%version%.json
 ** TODO remove the metadata files on package removal
 ** TODO add makepkg command to build a binpkg from an installed one
 ** TODO add binpkg support to the install command
-
-* 0.6.0
-** TODO update the output functions to use a data driven approach
+** TODO update the output functions to use a data driven approach   :theming:
 ** TODO Get wierd shell support in for login/logout if possible (csh/fish)
-** TODO GPG binpkg signing support
-** TODO dependancy tracking and resolution
 ** TODO finalize binpackage formats including metadata location
-
-* 0.7.0
 ** TODO whoowns, query, search type features
 ** TODO remote binpkg support (ft|htt)p(s) should suffice
 ** TODO packenv comand for metabuilds
 ** TODO support fetching and query of remote package metadata via (ft|htt)p(s)
-
-* 0.8.0
 ** TODO add -s / system flag to install so that it would require root privs, and go to a systemwide root
 ** TODO add -r flag to specify alternate install root (install|remove|enable|disable|list)
 ** TODO support publishing package to remote location via (ft|htt)p(s)
 ** TODO Get Sh/Zsh/Ksh login/logout support working properly
-
-* FUTURE
 ** TODO handler architecture for startup/cleanup options 
-** TODO target package cross-compilation support
-** TODO distcc and ccache support
