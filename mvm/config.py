@@ -30,6 +30,17 @@ class Edict(dict):
         dict.__setitem__(self, attr, value)
         dict.__setattr__(self, attr, value)
 
+class Elist(list):
+    def __init__(self, data=[]):
+        for itm in data:
+            if isinstance(itm, list):
+                self.append(Elist(itm))
+            else:
+                self.append(itm)
+
+    def last(self):
+        return self[-1:][0]
+
 class MvmConfig(object):
 
     def _readConfig(self):
