@@ -22,11 +22,8 @@ class MvmCmdInstall(object):
                 specs.append(PackageSpec(pSpec='%s/%s/%s.json' % (self.config.dirs.pkgspecs, pkg, ver),
                                          config=self.config))
                 # Now let's plow through our depends list, and build our whole install list
-                if len(specs[0].Depends()) > 0:
-                    for dep in specs[0].Depends():
-                        specs.append(PackageSpec(pSpec='%s.json' % dep, config=self.config))
-                        for dep in specs.last().Depends():
 
+            for spec in specs:
                 spec.Build(force=force, clean=clean, verbose=verbose)
         else:
             raise(ValueError, 'Specfile does not exist in %s' % self.config.dirs.pkgspecs)
