@@ -38,6 +38,16 @@ class Elist(list):
             else:
                 self.append(itm)
 
+    def unique(self, index):
+        cnt = 0
+        for itm in self:
+            if itm == self[index]:
+                cnt += 1
+        if cnt != 1:
+            return False
+        else:
+            return True
+
     def last(self):
         return self[-1:][0]
 
