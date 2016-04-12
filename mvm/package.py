@@ -27,8 +27,7 @@ class Package(object):
         self._gprofile = '%s/global.json' % cfg.dirs.profiles
         self._sprofile = '%s/session.json' % cfg.dirs.profiles
         self._config   = cfg
-        self._sessiond = '%s/%s' % (cfg.dirs.sessionroot,
-                                    self.SessionID)
+        self._sessiond = '%s/%s' % (cfg.dirs.sessionroot, self.SessionID)
 
     def __str__(self):
         return '%s-%s' % (self.Name, self.Version)
@@ -124,7 +123,7 @@ class Package(object):
                 if len(data[self.Name.lower()]) > 1:
                     for cnt in range(0, len(data[self.Name.lower()])):
                         if data[self.Name.lower()][cnt] == self.Version:
-                            data[self.name.lower()].pop(cnt)
+                            data[self.Name.lower()].pop(cnt)
                             break
                 else:
                     data.pop(self.Name.lower(), False)
