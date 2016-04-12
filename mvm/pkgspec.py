@@ -23,34 +23,41 @@ except ImportError:
 from mvm.term   import *
 from mvm.config import Edict
 
+class PackageOp(object):
+    def __init__(self):
+        pass
+
 class PackageSpec(object):
     '''
-    The PkgSpec() class deals with compiling and building packages based on a given data template
-    known as a Spec File. This is a standard JSON file, which describes the process of compilation.
-    The format of the file will (at some point) be documented in the project wiki.
+    The PkgSpec() class deals with compiling and building packages based
+    on a given data template known as a Spec File. This is a standard JSON
+    file, which describes the process of compilation. The format of the
+    file will (at some point) be documented in the project wiki.
     '''
 
     ##
     ## Class attributes
 
-    _defaults          = Edict({'osname':    os.uname()[0].lower(),
-                                'osvers':    os.uname()[2].lower(),
-                                'osarch':    os.uname()[4].lower(),
-                                'cores':     multiprocessing.cpu_count(),
-                                'prefix':    'X',           'packager':  None,
-                                'email':     None,          'homepage':  None,
-                                'package':   None,          'version':   None,
-                                'source':    None,          'license':   None,
-                                'patches':   [],            'depends':   [],
-                                'configure': {'cmd':  './configure',
-                                               'args': ['--prefix=%prefix%',],
-                                               'env':  [], 'enable': True},
-                                'compile':   {'cmd':  'make',
-                                               'args': ['-j%cores%',],
-                                               'env':  [], 'enable': True},
-                                'install':   {'cmd':  'make',
-                                               'args': ['install',],
-                                               'env': [], 'enable': True}})
+    _defaults = Edict({
+        'osname':    os.uname()[0].lower(),
+        'osvers':    os.uname()[2].lower(),
+        'osarch':    os.uname()[4].lower(),
+        'cores':     multiprocessing.cpu_count(),
+        'prefix':    'X',           'packager':  None,
+        'email':     None,          'homepage':  None,
+        'package':   None,          'version':   None,
+        'source':    None,          'license':   None,
+        'patches':   [],            'depends':   [],
+        'configure': {'cmd':  './configure',
+                      'args': ['--prefix=%prefix%',],
+                      'env':  [], 'enable': True},
+        'compile':   {'cmd':  'make',
+                      'args': ['-j%cores%',],
+                      'env':  [], 'enable': True},
+        'install':   {'cmd':  'make',
+                      'args': ['install',],
+                      'env': [], 'enable': True}
+    })
 
     ##
     ## Class Methods
@@ -165,19 +172,31 @@ class PackageSpec(object):
             sys.stdout.flush()
         print('')
 
-    def _extract(self):
-        print('%s%s Extracting %s' % (cyan('>'), white('>'),
-                                      os.path.basename(self._data.source)))
-        os.system('bsdtar xpf %s/%s -C %s' % (self._cfg.dirs.dstfiles,
-                                              os.path.basename(self._data.source),
-                                              self._cfg.dirs.pkgtemp))
+    def _extract(self, xfile):
+        print('%s%s Extracting %s' % (cyan('>'), white('>'), xfile))
+        odir = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
+                             self._data.package,
+                             self._data.version)
+        if not os.path.isdir(odir):
+            os.mkdir(odir)
+        os.system('bsdtar -xpf %s/%s --strip-components 1 -C %s/' % (
+            self._cfg.dirs.dstfiles,
+            xfile,
+            odir
+        ))
 
     def _patch(self, pname=False):
         if not pname or not os.path.isfile('%s/%s' % (self._cfg.dirs.dstfiles, pname)):
             raise(ValueError, 'You must supply a valid patch file.')
-        cdir = os.getcwd()
-        os.chdir('%s/%s-%s' % (self._cfg.dirs.pkgtemp, self._data.package, self._data.version))
-        os.system('')
+        print('%s%s Applying patch %s' % (cyan('>'), white('>'), pname))
+        sdir = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
+                             self._data.package,
+                             self._data.version)
+        self._cmd(sdir, {
+            'cmd': 'patch -p0 <%s/%s' % (self._cfg.dirs.dstfiles, pname),
+            'env': [],
+            'args': []})
+
 
     def _cmd(self, dname, data):
         cdir = os.getcwd()
@@ -211,8 +230,29 @@ class PackageSpec(object):
         pass
 
     def Build(self, force=None, clean=None, verbose=None):
-        self._fetch(self._data.source)
-        self._extract()
+        # Let's do all of our fetching up front.
+        # Lets attempt to download our source if it's a string
+        if isinstance(self._data.source, str_types):
+            self._fetch(self._data.source)
+        # Or the first one we can get if it's a list.
+        elif isinstance(self._data.source, list):
+            for uri in self._data.source:
+                self._fetch(uri)
+                self._data.source = uri
+                break
+        # Now let's grab all of our patches and apply them.
+        if isinstance(self._data.patches, str_types):
+            self._fetch(self._data.patches)
+        elif isinstance(self._data.patches, list):
+            for uri in self._data.patches:
+                self._fetch(uri)
+        self._extract(os.path.basename(self._data.source))
+        if isinstance(self._data.patches, str_types):
+            self._patch(os.path.basename(self._data.patches))
+        elif isinstance(self._data.patches, list):
+            for uri in self._data.patches:
+                self._patch(os.path.basename(uri))
+
         for method in ((self._data.configure, 'Configuring.'),
                        (self._data.compile,   'Compiling.'),
                        (self._data.install,   'Installing.')):
