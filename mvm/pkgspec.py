@@ -9,6 +9,7 @@ import re
 import sys
 import json
 import time
+import hashlib
 import subprocess
 import multiprocessing
 
@@ -48,6 +49,7 @@ class PackageSpec(object):
         'package':   None,          'version':   None,
         'source':    None,          'license':   None,
         'patches':   [],            'depends':   [],
+        'sha256':    None,
         'configure': {'cmd':  './configure',
                       'args': ['--prefix=%prefix%',],
                       'env':  [], 'enable': True},
@@ -100,10 +102,10 @@ class PackageSpec(object):
         self._data            = Edict(self._macros(self._data.copy()).copy())
 
     def __str__(self):
-        return str('pkgspec:%s-%s' % (self._data.package, self._data.version))
+        return str('%s-%s' % (self._data.package, self._data.version))
 
     def __repr__(self):
-        print(str(self.__str__()))
+        return self.__str__()
 
     ##
     ## Private Methods
@@ -146,6 +148,19 @@ class PackageSpec(object):
                 data[itm] = tmps
         return data
 
+    def _validate(self, fname, sha256):
+        if os.path.isfile(fname):
+            sha  = hashlib.sha256()
+            fp   = open(fname, 'rb')
+            buff = fp.read(1048576)
+            while buff:
+                sha.update(buff)
+                buff = fp.read(1048576)
+            if sha256 == sha.hexdigest():
+                return True
+            else:
+                return False
+
     def _fetch(self, uri):
         output    = '%s/%s' % (self._cfg.dirs.dstfiles,
                                os.path.basename(uri))
@@ -171,6 +186,9 @@ class PackageSpec(object):
                                                              ' '*10))
             sys.stdout.flush()
         print('')
+        if self._data.sha256 != None:
+            if not self._validate(output, self._data.sha256):
+                raise(Exception, 'The downloaded file does not match the recorded sha256.')
 
     def _extract(self, xfile):
         print('%s%s Extracting %s' % (cyan('>'), white('>'), xfile))
@@ -226,40 +244,50 @@ class PackageSpec(object):
     def Depends(self):
         return self._defaults.depends
 
+    def Requires(self, pkg):
+        if str(pkg) in self._data.depends:
+            return True
+        else:
+            return False
+
     def Package(self):
         pass
 
     def Build(self, force=None, clean=None, verbose=None):
-        # Let's do all of our fetching up front.
-        # Lets attempt to download our source if it's a string
-        if isinstance(self._data.source, str_types):
-            self._fetch(self._data.source)
-        # Or the first one we can get if it's a list.
-        elif isinstance(self._data.source, list):
-            for uri in self._data.source:
-                self._fetch(uri)
-                self._data.source = uri
-                break
-        # Now let's grab all of our patches and apply them.
-        if isinstance(self._data.patches, str_types):
-            self._fetch(self._data.patches)
-        elif isinstance(self._data.patches, list):
-            for uri in self._data.patches:
-                self._fetch(uri)
-        self._extract(os.path.basename(self._data.source))
-        if isinstance(self._data.patches, str_types):
-            self._patch(os.path.basename(self._data.patches))
-        elif isinstance(self._data.patches, list):
-            for uri in self._data.patches:
-                self._patch(os.path.basename(uri))
+        try:
+            # Let's do all of our fetching up front.
+            # Lets attempt to download our source if it's a string
+            if isinstance(self._data.source, str_types):
+                self._fetch(self._data.source)
+            # Or the first one we can get if it's a list.
+            elif isinstance(self._data.source, list):
+                for uri in self._data.source:
+                    self._fetch(uri)
+                    self._data.source = uri
+                    break
+            # Now let's grab all of our patches and apply them.
+            if isinstance(self._data.patches, str_types):
+                self._fetch(self._data.patches)
+            elif isinstance(self._data.patches, list):
+                for uri in self._data.patches:
+                    self._fetch(uri)
+            self._extract(os.path.basename(self._data.source))
+            if isinstance(self._data.patches, str_types):
+                self._patch(os.path.basename(self._data.patches))
+            elif isinstance(self._data.patches, list):
+                for uri in self._data.patches:
+                    self._patch(os.path.basename(uri))
 
-        for method in ((self._data.configure, 'Configuring.'),
-                       (self._data.compile,   'Compiling.'),
-                       (self._data.install,   'Installing.')):
-            if method[0].enable:
-                print("%s%s %s" % (cyan('>'), white('>'), method[1]))
-                dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
-                                      self._data.package,
-                                      self._data.version)
-                self._cmd(dname, method[0])
+            for method in ((self._data.configure, 'Configuring.'),
+                           (self._data.compile,   'Compiling.'),
+                           (self._data.install,   'Installing.')):
+                if method[0].enable:
+                    print("%s%s %s" % (cyan('>'), white('>'), method[1]))
+                    dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
+                                          self._data.package,
+                                          self._data.version)
+                    self._cmd(dname, method[0])
+        except Exception as msg:
+            fatal(repr(msg.args))
+            sys.exit(1)
 
