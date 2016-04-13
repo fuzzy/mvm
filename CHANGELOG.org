@@ -20,7 +20,7 @@ CLOSED: [2016-04-03 Sun 15:15]
 CLOSED: [2016-04-04 Mon 01:20]
 ** DONE proper setup.py support and prep for module publishing with proper shell integration
 CLOSED: [2016-04-05 Tue 05:51]
-*** DONE fix installation issues (with init checks)
+** DONE fix installation issues (with init checks)
 CLOSED: [2016-04-05 Tue 16:19]
 ** DONE audit the code for proper author, license, etc metadata
 CLOSED: [2016-04-05 Tue 16:38]
@@ -33,7 +33,6 @@ CLOSED: [2016-04-03 Sun 14:03]
 By changing the way the pkg/ver are seperated in the install command the need for the keyword
 ** DONE make case issues when referencing packages a moot issue
 CLOSED: [2016-04-10 Sun 22:38]
-
 ** DONE allow multiple source URI's
 CLOSED: [2016-04-11 Mon 18:31]
 you can specify a single source location as a string, or multiple locations as
@@ -44,11 +43,13 @@ Enforced source dir naming convention conformity, yet again eliminating the need
 for this.
 ** DONE add optional keyword patches to PackageSpec with support for relative paths or URI's
 CLOSED: [2016-04-11 Mon 19:11]
+** DONE depends list and sorted dependancy graph
+CLOSED: [2016-04-13 Wed 09:56]
+** DONE MD5/SHA* verification of downloads
+CLOSED: [2016-04-13 Wed 14:22]
 
 * TODO PackageSpec
-** TODO MD5/SHA* verification of downloads
 ** TODO show total size as speed if time spend dloading was < 1s
-** TODO depends list and sorted dependancy graph
 ** TODO continue incomplete downloads
 ** TODO real time logging of executed commands
 ** TODO return status checking on executed commands
