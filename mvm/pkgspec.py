@@ -197,11 +197,13 @@ class PackageSpec(object):
                              self._data.version)
         if not os.path.isdir(odir):
             os.mkdir(odir)
-        os.system('bsdtar -xpf %s/%s --strip-components 1 -C %s/' % (
-            self._cfg.dirs.dstfiles,
-            xfile,
-            odir
-        ))
+        self._cmd(data={
+            'bsdtar -xpf %s/%s --strip-components 1 -C %s/' % (self._cfg.dirs.dstfiles,
+                                                               xfile,
+                                                               odir),
+            'env': [],
+            'args': []})
+
 
     def _patch(self, pname=False):
         if not pname or not os.path.isfile('%s/%s' % (self._cfg.dirs.dstfiles, pname)):
@@ -215,28 +217,55 @@ class PackageSpec(object):
             'env': [],
             'args': []})
 
-
-    def _cmd(self, dname, data):
-        cdir = os.getcwd()
-        env  = []
-
-        os.chdir(dname)
-        for e in data['env']:
-            env.append('='.join(e))
-
-        cmd  = 'env %s %s %s' % (' '.join(env), data['cmd'], ' '.join(data['args']))
-        proc = subprocess.Popen(cmd,
-                                shell=True,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT,
-                                close_fds=True)
-        logfile = '%s/%s-%s.log' % (self._cfg.dirs.pkgtemp,
-                                    self._data['package'].lower(),
-                                    self._data['version'])
-        open(logfile, 'ab').write(proc.stdout.read())
-        #os.system('env %s %s %s' % (' '.join(env), data['cmd'], ' '.join(data['args'])))
-        os.chdir(cdir)
+    def _cmd(self, dname='/', data=False):
+        cdir     = os.getcwd()
+        env      = []
+        if data:
+            # Let's get into place
+            os.chdir(dname)
+            # And build our environment if any
+            for e in data['env']:
+                env.append('='.join(e))
+            # Then put env, cmd and args together
+            cmd      = 'env %s %s %s' % (' '.join(env), data['cmd'], ' '.join(data['args']))
+            # And build our process object
+            proc     = subprocess.Popen(
+                cmd,
+                shell=True,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                close_fds=True
+            )
+            # This of course is necessary
+            logfile  = '%s/%s-%s.log' % (
+                self._cfg.dirs.pkgtemp,
+                self._data['package'].lower(),
+                self._data['version']
+            )
+            logfp    = open(logfile, 'ab')
+            # Now let's get to work processing the output of the command
+            buff     = proc.stdout.readline()
+            while buff:
+                logfp.write(buff)
+                logfp.flush()
+                buff = proc.stdout.readline()
+            # Let's be good citizens and clean up
+            proc.stdin.close()
+            proc.stdout.close()
+            # Now let's take into account our return value
+            if proc.wait() != 0:
+                raise(
+                    Exception,
+                    'The command (%s) failed to execute properly. See %s for more information.' % (
+                        cmd,
+                        logfile
+                    ))
+            # And finally let's go back home, and return
+            os.chdir(cdir)
+            return True
+        else:
+            return False
 
     ##
     ## Public Methods
@@ -253,31 +282,38 @@ class PackageSpec(object):
     def Package(self):
         pass
 
+    def Download(self, first=False):
+        if isinstance(self._data.source, str_types):
+            self._fetch(self._data.source)
+            return self._data.source
+        elif isinstance(self._data.source, list):
+            for uri in self._data.source:
+                self._fetch(uri)
+                if first:
+                    return uri
+
+    def Extract(self):
+        return self._extract(os.path.basename(self._data.source))
+
+    def Patch(self):
+        if isinstance(self._data.patches, str_types):
+            self._patch(os.path.basename(self._data.patches))
+        elif isinstance(self._data.patches, list):
+            for uri in self._data.patches:
+                self._patch(os.path.basename(uri))
+
     def Build(self, force=None, clean=None, verbose=None):
         try:
-            # Let's do all of our fetching up front.
-            # Lets attempt to download our source if it's a string
-            if isinstance(self._data.source, str_types):
-                self._fetch(self._data.source)
-            # Or the first one we can get if it's a list.
-            elif isinstance(self._data.source, list):
-                for uri in self._data.source:
-                    self._fetch(uri)
-                    self._data.source = uri
-                    break
-            # Now let's grab all of our patches and apply them.
-            if isinstance(self._data.patches, str_types):
-                self._fetch(self._data.patches)
-            elif isinstance(self._data.patches, list):
-                for uri in self._data.patches:
-                    self._fetch(uri)
-            self._extract(os.path.basename(self._data.source))
-            if isinstance(self._data.patches, str_types):
-                self._patch(os.path.basename(self._data.patches))
-            elif isinstance(self._data.patches, list):
-                for uri in self._data.patches:
-                    self._patch(os.path.basename(uri))
-
+            # Let's get our downloading out of the way.
+            source = self.Download(first=True)
+            self._data.source = self._data.patches
+            self.Download()
+            self._data.source = source
+            # Now let's extract
+            self.Extract()
+            # Apply those patches
+            self.Patch()
+            # And set about doing the real work
             for method in ((self._data.configure, 'Configuring.'),
                            (self._data.compile,   'Compiling.'),
                            (self._data.install,   'Installing.')):
@@ -287,7 +323,7 @@ class PackageSpec(object):
                                           self._data.package,
                                           self._data.version)
                     self._cmd(dname, method[0])
-        except Exception as msg:
+        except Exception as e:
             fatal(repr(msg.args))
             sys.exit(1)
 
