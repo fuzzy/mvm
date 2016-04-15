@@ -54,6 +54,9 @@ def OutputWord(word):
 def lineOut(txt):
     print('%s%s %s' % (cyan('>'), white('>'), txt))
 
+def block(txt):
+    return('%s%s%s' % (cyan('['), txt, cyan(']')))
+
 def humanTime(amount):
     secs  = float(datetime.timedelta(seconds=amount).total_seconds())
     units = [("d", 86400), ("h", 3600), ("m", 60), ("s", 1)]
