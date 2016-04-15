@@ -85,6 +85,8 @@ class PackageSpec(object):
             self._spec        = pSpec
         elif os.path.isfile(self._cfg.dirs.pkgspecs+'/'+pSpec):
             self._spec        = self._cfg.dirs.pkgspecs+'/'+pSpec
+        else:
+            debug(pSpec)
         # Let's read in our JSON data
         try:
             self._data        = Edict(json.loads(open(self._spec).read()))
@@ -149,6 +151,7 @@ class PackageSpec(object):
         return data
 
     def _validate(self, fname, sha256):
+        lineOut('%s Checksumming' % block(str(self)))
         if os.path.isfile(fname):
             sha  = hashlib.sha256()
             fp   = open(fname, 'rb')
@@ -164,7 +167,6 @@ class PackageSpec(object):
     def _fetch(self, uri):
         output    = '%s/%s' % (self._cfg.dirs.dstfiles,
                                os.path.basename(uri))
-        print('%s%s %s' % (cyan('>'), white('>'), uri))
         inFP      = urlopen(uri)
         outFP     = open(output, 'wb+')
         buffsize  = (1024 * 40)
@@ -178,12 +180,16 @@ class PackageSpec(object):
             outsz += len(buff)
             tlen  = int(time.time() - st)
             if tlen == 0: tlen = 1
-            sys.stdout.write('%s%s %s in %s @ %s/sec%s\r' % (cyan('>'),
-                                                             white('>'),
-                                                             humanSize(outsz),
-                                                             humanTime(tlen),
-                                                             humanSize(outsz / tlen),
-                                                             ' '*10))
+            sys.stdout.write(
+                '%s%s %s %s: %s in %s @ %s/sec%s\r' % (
+                    cyan('>'),
+                    white('>'),
+                    block(str(self)),
+                    os.path.basename(uri),
+                    white(humanSize(outsz)),
+                    white(humanTime(tlen)),
+                    white(humanSize(outsz / tlen)),
+                    ' '*10))
             sys.stdout.flush()
         print('')
         if self._data.sha256 != None:
@@ -191,14 +197,14 @@ class PackageSpec(object):
                 raise(Exception, 'The downloaded file does not match the recorded sha256.')
 
     def _extract(self, xfile):
-        print('%s%s Extracting %s' % (cyan('>'), white('>'), xfile))
+        lineOut('%s Extracting' % block(str(self)))
         odir = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
                              self._data.package,
                              self._data.version)
         if not os.path.isdir(odir):
             os.mkdir(odir)
         self._cmd(data={
-            'bsdtar -xpf %s/%s --strip-components 1 -C %s/' % (self._cfg.dirs.dstfiles,
+            'cmd': 'bsdtar -xpf %s/%s --strip-components 1 -C %s/' % (self._cfg.dirs.dstfiles,
                                                                xfile,
                                                                odir),
             'env': [],
@@ -208,7 +214,7 @@ class PackageSpec(object):
     def _patch(self, pname=False):
         if not pname or not os.path.isfile('%s/%s' % (self._cfg.dirs.dstfiles, pname)):
             raise(ValueError, 'You must supply a valid patch file.')
-        print('%s%s Applying patch %s' % (cyan('>'), white('>'), pname))
+        lineOut('%s Applying patch: %s' % (block(str(self)), white(pname)))
         sdir = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
                              self._data.package,
                              self._data.version)
@@ -305,20 +311,20 @@ class PackageSpec(object):
     def Build(self, force=None, clean=None, verbose=None):
         try:
             # Let's get our downloading out of the way.
-            source = self.Download(first=True)
-            self._data.source = self._data.patches
-            self.Download()
-            self._data.source = source
+            #source = self.Download(first=True)
+            #self._data.source = self._data.patches
+            #self.Download()
+            #self._data.source = source
             # Now let's extract
-            self.Extract()
+            #self.Extract()
             # Apply those patches
-            self.Patch()
+            #self.Patch()
             # And set about doing the real work
             for method in ((self._data.configure, 'Configuring.'),
                            (self._data.compile,   'Compiling.'),
                            (self._data.install,   'Installing.')):
                 if method[0].enable:
-                    print("%s%s %s" % (cyan('>'), white('>'), method[1]))
+                    lineOut("%s %s" % (block(str(self)), method[1]))
                     dname = '%s/%s-%s' % (self._cfg.dirs.pkgtemp,
                                           self._data.package,
                                           self._data.version)

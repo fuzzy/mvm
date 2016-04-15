@@ -55,8 +55,19 @@ class MvmCmdInstall(object):
                     if changes:
                         break
 
-            # And now let's install each successive package
+            # And now let's fetch everything
+            for dl in specs:
+                source = dl.Download(first=True)
+                dl._data.source = dl._data.patches
+                dl.Download()
+                dl._data.source = source
+            # Next we'll extract and patch
+            for tb in specs:
+                tb.Extract()
+                tb.Patch()
+            # And finally, fire off the build method
             for spec in specs:
+                debug(spec._data)
                 spec.Build(force=force, clean=clean, verbose=verbose)
         else:
             raise(ValueError, 'Specfile does not exist in %s' % self.config.dirs.pkgspecs)
